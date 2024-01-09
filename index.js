@@ -13,6 +13,16 @@ const kafka = new Kafka({
   brokers: ['localhost:9092'],
 });
 
+const admin = kafka.admin();
+
+await admin.connect()
+
+const metadata = await admin.fetchTopicMetadata();
+
+ const topics = metadata.topics.map(topic => topic.name);
+
+console.log('List of topics:', topics);
+
 const producer = kafka.producer();
 
 // Express endpoint to produce messages to Kafka
