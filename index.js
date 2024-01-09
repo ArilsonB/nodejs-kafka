@@ -13,17 +13,27 @@ const kafka = new Kafka({
   brokers: ['localhost:9092'],
 });
 
-const admin = kafka.admin();
+async function listTopics() {
+  const admin = kafka.admin();
+  try {
+    await admin.connect()
 
-await admin.connect()
+    const metadata = await admin.fetchTopicMetadata();
 
-const metadata = await admin.fetchTopicMetadata();
+    const topics = metadata.topics.map(topic => topic.name);
 
- const topics = metadata.topics.map(topic => topic.name);
+    console.log('List of topics:', topics);
+    
+  } catch(error) {
+    console.error('Error fetching topic metadata:', error);
+  } finally {
+    await admin.disconnect();
+  }
 
-console.log('List of topics:', topics);
 
-await admin.disconnect();
+}
+
+listTopics();
 
 const producer = kafka.producer();
 
