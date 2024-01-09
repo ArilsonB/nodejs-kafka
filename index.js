@@ -23,6 +23,8 @@ const metadata = await admin.fetchTopicMetadata();
 
 console.log('List of topics:', topics);
 
+await admin.disconnect();
+
 const producer = kafka.producer();
 
 // Express endpoint to produce messages to Kafka
